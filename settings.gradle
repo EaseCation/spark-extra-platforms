@@ -14,6 +14,7 @@ include (
         'spark-geyser',
         'spark-hytale',
         'spark-minestom',
+        'spark-nemisys',
         'spark-nukkit',
         'spark-sponge7',
         'spark-velocity4',
