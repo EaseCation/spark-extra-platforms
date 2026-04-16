@@ -22,6 +22,10 @@ package me.lucko.spark.nukkit;
 
 import cn.nukkit.command.Command;
 import cn.nukkit.command.CommandSender;
+import cn.nukkit.command.PluginCommand;
+import cn.nukkit.command.data.CommandEnum;
+import cn.nukkit.command.data.CommandParamType;
+import cn.nukkit.command.data.CommandParameter;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.plugin.service.ServicePriority;
 import me.lucko.spark.api.Spark;
@@ -42,6 +46,7 @@ public class NukkitSparkPlugin extends PluginBase implements SparkPlugin {
     public void onEnable() {
         this.platform = new SparkPlatform(this);
         this.platform.enable();
+        getServer().getCommandMap().register("spark", new SparkCommand(this));
     }
 
     @Override
@@ -123,5 +128,22 @@ public class NukkitSparkPlugin extends PluginBase implements SparkPlugin {
     @Override
     public void registerApi(Spark api) {
         getServer().getServiceManager().register(Spark.class, api, this, ServicePriority.NORMAL);
+    }
+
+    private static final class SparkCommand extends PluginCommand<NukkitSparkPlugin> {
+
+        public SparkCommand(NukkitSparkPlugin plugin) {
+            super("spark", plugin);
+            setDescription("Main plugin command");
+            setPermission("spark");
+            commandParameters.clear();
+            commandParameters.put("default", new CommandParameter[]{
+                    CommandParameter.newEnum("subCommand", new CommandEnum("SparkSubCommand", "tps", "ping", "healthreport", "gc", "gcmonitor", "heapsummary", "heapdump", "activity")),
+            });
+            commandParameters.put("profiler", new CommandParameter[]{
+                    CommandParameter.newEnum("subCommand", new CommandEnum("SparkSubCommandProfiler", "profiler")),
+                    CommandParameter.newEnum("action", new CommandEnum("SparkProfilerAction", "info", "open", "start", "stop", "cancel")),
+            });
+        }
     }
 }
