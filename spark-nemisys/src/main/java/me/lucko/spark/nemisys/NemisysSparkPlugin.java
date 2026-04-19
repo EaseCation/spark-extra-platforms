@@ -70,10 +70,13 @@ public class NemisysSparkPlugin extends PluginBase implements SparkPlugin {
 
     @Override
     public Stream<NemisysCommandSender> getCommandSenders() {
+/*      // we currently only have ConsoleCommandSender
         return Stream.concat(
                 getServer().getOnlinePlayers().values().stream(),
                 Stream.of(getServer().getConsoleSender())
         ).map(NemisysCommandSender::new);
+*/
+        return Stream.of(new NemisysCommandSender(getServer().getConsoleSender()));
     }
 
     @Override
